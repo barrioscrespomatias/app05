@@ -31,6 +31,11 @@ export class LoginComponent implements OnInit {
     this.angularFireService.SignUp(this.email?.value, this.password?.value);
   }
 
+  AccesoRapido(mail: string, password: string) {
+    this.email?.setValue(mail);
+    this.password?.setValue(password);
+  }
+
   ngOnInit(): void {
     this.form = new FormGroup({
       email: new FormControl('', [Validators.required, Validators.email]),

@@ -15,6 +15,11 @@ const routes: Routes = [
     path: '', component: LoginComponent    
   },
   { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
+  {
+    path: 'splash',
+    loadChildren: () => import('./splash/splash.module').then( m => m.SplashPageModule)
+  },
+
 ];
 @NgModule({
   imports: [
