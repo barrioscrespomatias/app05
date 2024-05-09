@@ -47,8 +47,18 @@ export class AngularFireService {
       })
       .catch((error) => {
         console.log(error);
+        if (error.message == 'Firebase: The email address is badly formatted. (auth/invalid-email).')
+          this.toastService.ToastMessage(
+            'La dirección de email ingresada no es correcta.',
+            'top'
+          );
+        else if (error.message == 'Firebase: There is no user record corresponding to this identifier. The user may have been deleted. (auth/user-not-found).')
+          this.toastService.ToastMessage(
+            'Email o contraseña inválido.',
+            'top'
+          );
         // this.swal.SwalMensajeError('Error',error.message);
-        this.toastService.ToastMessage(error.message, 'top');
+        // this.toastService.ToastMessage(error.message, 'top');
       });
   }
   // Sign up with email/password
