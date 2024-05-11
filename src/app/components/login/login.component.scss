@@ -10,12 +10,19 @@ $quinto: #e4eaff;
 
 body {
   font: 100% $font-stack;
-  background-color: $primero;
+}
+
+.background {
+  background-image: url('../../../assets/images/05-background.svg');
+  background-repeat: no-repeat; /* Evita que la imagen se repita */
+  background-size: cover; /* Escala la imagen para cubrir todo el contenedor */
+  background-position: center center; /* Centra la imagen */
+  background-attachment: fixed; /* Fija la imagen en su posición original */
 }
 
 .blue {
     font: 100% $font-stack;
-    background-color: $primero;
+    background-color: transparent;
   }
 
 ion-card {

@@ -1,4 +1,4 @@
-<body>
+<body class="background">
   <ion-list class="blue">
     <form [formGroup]="form">
       <ion-grid class>
@@ -50,7 +50,7 @@
             <ion-card class="blue">
               <img alt="logo" src="../../../assets/images/5_carga-credito_logo.png" width="200" height="200" />
               <ion-card-header>
-                <ion-card-title>Carga de credito</ion-card-title>
+                <ion-card-title>Carga de crédito</ion-card-title>
                 <ion-card-subtitle>Iniciar sesión</ion-card-subtitle>
               </ion-card-header>
             </ion-card>
@@ -88,29 +88,43 @@
         </ion-row> -->
 
         <ion-grid>
-          <ion-row>
-            <!-- Left Column -->
-            <ion-col size="6">
-              <ion-row class="ion-align-items-start">
-                <ion-col size="12" class="ion-text-center">
-                  <img src="../../../assets/images/user-c.png" alt="User C" width="50%" height="60" (click)="AccesoRapido('admin@admin.com','1111')">
-                </ion-col>
-                <ion-col size="12" class="ion-text-center">
-                  <img src="../../../assets/images/user-b.png" alt="User B" width="50%" height="60" (click)="AccesoRapido('invitado@invitado.com','2222')">
-                </ion-col>
-                <ion-col size="12" class="ion-text-center">
-                  <img src="../../../assets/images/user-a.png" alt="User A" width="50%" height="60" (click)="AccesoRapido('usuario@usuario.com','3333')">
-                </ion-col>
-              </ion-row>
+          <ion-row class="ion-align-items-center" style="margin-top: 11%;">
+            <ion-col size="4" class="ion-text-center">
+              <span>ADMIN</span>
             </ion-col>
-        
-            <!-- Right Column -->
-            <ion-col size="6">
-              <div style="height: 100%; display: flex; align-items: center; justify-content: center;">
-                <ion-button type="submit" color="primary" size="large" expand="block" style="height: 50%; max-height: 160px;" (click)="SignIn()">Ingresar</ion-button>
-              </div>
+            <ion-col size="4" class="ion-text-center">
+              <span>INVITADO</span>
+            </ion-col>
+            <ion-col size="4" class="ion-text-center">
+              <span>USUARIO</span>
+            </ion-col>
+            
+            <ion-col size="4" class="ion-text-center">
+              <img src="../../../assets/images/user.png" class="rounded-circle" alt="Cinque Terre" width="120" height="120" (click)="AccesoRapido('admin@admin.com','111111')"> 
+            </ion-col>
+            <ion-col size="4" class="ion-text-center">
+              <img src="../../../assets/images/user.png" class="rounded-circle" alt="Cinque Terre" width="120" height="120" (click)="AccesoRapido('invitado@invitado.com','222222')"> 
+            </ion-col>
+            <ion-col size="4" class="ion-text-center">
+              <img src="../../../assets/images/user.png" class="rounded-circle" alt="Cinque Terre" width="120" height="120" (click)="AccesoRapido('usuario@usuario.com','333333')"> 
+            </ion-col>        
+          </ion-row>  
+
+        <!-- <ion-grid> -->
+          <ion-row class="ion-align-items-center">
+            <ion-col size="12" class="ion-text-center">
+              <ion-button type="submit" color="primary" size="large" expand="block" (click)="SignIn()">Ingresar</ion-button>
             </ion-col>
           </ion-row>
+          <!-- </ion-grid> -->
+  
+          <!-- <ion-grid> -->
+          <!-- <ion-row class="ion-align-items-center">
+            <ion-col size="12" class="ion-text-center">
+              <ion-button type="submit" color="success" expand="block" (click)="SignUp()">Registrarse</ion-button>
+            </ion-col>
+          </ion-row> --> 
+
         </ion-grid>
       </ion-grid>
     </form>
