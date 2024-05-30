@@ -14,6 +14,7 @@ import { LoginComponent } from './components/login/login.component';
 import { HomeComponent } from './components/home/home.component';
 import { ToastComponent } from './components/toast/toast.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ZXingScannerModule } from '@zxing/ngx-scanner';
 
 @NgModule({
   declarations: [AppComponent, MenuComponent, LoginComponent, HomeComponent, ToastComponent],
@@ -25,7 +26,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore()),
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    ZXingScannerModule
   ],
   exports: [
     MenuComponent, LoginComponent,HomeComponent,ToastComponent // Agrega el componente en la sección de exports
