@@ -1,17 +1,18 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, OnDestroy } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { NavController } from '@ionic/angular';
+import { LoadingController, NavController } from '@ionic/angular';
 import { AngularFireService } from 'src/app/services/angular-fire.service';
 import { ToastService } from 'src/app/services/toast.service';
 import { Barcode, BarcodeScanner } from '@capacitor-mlkit/barcode-scanning';
 import { AlertController } from '@ionic/angular';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnDestroy {
 
   currentEmail = '';
   credits: number = 0;
@@ -27,20 +28,52 @@ export class HomeComponent implements OnInit {
 
   isSupported = false;
   barcodes: Barcode[] = [];
+  userSubscription!: Subscription;
 
   constructor(
     private firestore: AngularFirestore,
-    private cdRef: ChangeDetectorRef, 
+    private cdRef: ChangeDetectorRef,
     private angularFireService: AngularFireService,
     private toastService: ToastService,
     private navCtrl: NavController,
-    private alertController: AlertController
+    private alertController: AlertController,
+    private loadingCtrl: LoadingController
   ) {}
 
   async ngOnInit() {
     this.currentEmail = await this.angularFireService.GetEmailLogueado();
     BarcodeScanner.isSupported().then((result) => {
       this.isSupported = result.supported;
+    });
+    this.subscribeToUserCredits();
+  }
+
+  ngOnDestroy() {
+    if (this.userSubscription) {
+      this.userSubscription.unsubscribe();
+    }
+  }
+
+  subscribeToUserCredits(): void {
+    const userDoc = this.firestore.collection('userCredits').doc(this.currentEmail);
+    this.userSubscription = userDoc.valueChanges().subscribe((data: any) => {
+      if (data) {
+        this.credits = data.credits || 0;
+        this.scannedCodes = new Set(data.scannedCodes || []);
+        if (data.adminScanCount) {
+          this.adminScanCount = data.adminScanCount;
+        }
+        this.cdRef.detectChanges();  // Ensure the view updates
+      }
+    });
+  }
+
+  async updateUserCredits(): Promise<void> {
+    const userDoc = this.firestore.collection('userCredits').doc(this.currentEmail);
+    await userDoc.set({
+      credits: this.credits,
+      scannedCodes: Array.from(this.scannedCodes),
+      adminScanCount: this.adminScanCount
     });
   }
 
@@ -53,7 +86,7 @@ export class HomeComponent implements OnInit {
     const { barcodes } = await BarcodeScanner.scan();
     this.barcodes.push(...barcodes);
     for (let barcode of barcodes) {
-      this.handleQrCodeResult(barcode.rawValue);
+      await this.handleQrCodeResult(barcode.rawValue);
     }
   }
 
@@ -71,16 +104,16 @@ export class HomeComponent implements OnInit {
     await alert.present();
   }
 
-  handleQrCodeResult(result: string): void {
+  async handleQrCodeResult(result: string): Promise<void> {
     if (!this.qrCodes[result]) {
-      alert('Código QR no válido.');
+      this.toastService.ToastMessage('Código QR no válido.', 'middle');
       return;
     }
 
     if (this.currentEmail === 'admin@admin.com') {
       if (this.adminScanCount[result]) {
         if (this.adminScanCount[result] >= 2) {
-          alert('No se puede cargar el código más de dos veces.');
+          this.toastService.ToastMessage('No se puede cargar el código más de dos veces.', 'middle');
           return;
         } else {
           this.adminScanCount[result]++;
@@ -90,20 +123,35 @@ export class HomeComponent implements OnInit {
       }
     } else {
       if (this.scannedCodes.has(result)) {
-        alert('Código QR ya cargado.');
+        this.toastService.ToastMessage('Código QR ya cargado.', 'middle');
         return;
       }
     }
 
     this.credits += this.qrCodes[result];
     this.scannedCodes.add(result);
-    alert(`Crédito cargado: ${this.qrCodes[result]}. Crédito total: ${this.credits}`);
+    await this.updateUserCredits();
+    this.toastService.ToastMessage(`${this.qrCodes[result]} Créditos se han cargado exitosamente!!`, 'middle');
   }
 
-  clearCredits(): void {
+  async clearCredits(): Promise<void> {
     this.credits = 0;
     this.scannedCodes.clear();
     this.adminScanCount = {};
-    alert('Créditos limpiados.');
+    await this.updateUserCredits();
+    this.toastService.ToastMessage('Créditos limpiados.', 'middle');
+  }
+
+  navigateTo(section: string) {
+    this.navCtrl.navigateForward(`/${section}`);
+  }
+
+  async showLoading() {
+    const loading = await this.loadingCtrl.create({
+      message: 'Dismissing after 3 seconds...',
+      duration: 3000,
+    });
+
+    loading.present();
   }
 }

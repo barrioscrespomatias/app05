@@ -21,6 +21,10 @@ export class LoginComponent implements OnInit {
 
   SignIn() {
     this.angularFireService.SignIn(this.email?.value, this.password?.value);
+    setTimeout(() => {
+      this.form.controls['email'].setValue('');
+      this.form.controls['password'].setValue('');
+    }, 700);
   }
 
   GoogleAuth() {

@@ -1,0 +1,53 @@
+ion-header,
+ion-content {
+  --background: #00b4b6; /* Fondo claro */
+}
+
+.credits-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.credits-container {
+  width: 80%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.credits-number {
+  background-color: #4a90e2; /* Color de fondo del cuadrado */
+  padding: 20px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #fff; /* Texto en blanco */
+}
+
+.credits-label {
+  font-size: 24px;
+}
+
+.credits-value {
+  font-size: 40px; /* Tamaño grande del número de créditos */
+  font-weight: bold;
+}
+
+.credits-button {
+  --background: #4a90e2; /* Color de fondo del botón */
+  color: #fff; /* Texto en blanco */
+  margin-top: 20px;
+}
+
+.scan-button {
+  margin-bottom: 10px; /* Espacio entre los botones */
+}
+
+.clear-button {
+  margin-top: 10px; /* Espacio entre los botones */
+}
