@@ -29,6 +29,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   isSupported = false;
   barcodes: Barcode[] = [];
   userSubscription!: Subscription;
+  horaActual: Date = new Date();
+  intervalId: any;
 
   constructor(
     private firestore: AngularFirestore,
@@ -46,12 +48,24 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.isSupported = result.supported;
     });
     this.subscribeToUserCredits();
+
+    this.intervalId = setInterval(() => {
+      this.horaActual = new Date();
+    }, 1000);
   }
 
   ngOnDestroy() {
     if (this.userSubscription) {
       this.userSubscription.unsubscribe();
     }
+
+    if (this.intervalId) {
+      clearInterval(this.intervalId);
+    }
+  }
+
+  get hora(): string {
+    return this.horaActual.toLocaleTimeString();
   }
 
   subscribeToUserCredits(): void {
@@ -106,14 +120,14 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   async handleQrCodeResult(result: string): Promise<void> {
     if (!this.qrCodes[result]) {
-      this.toastService.ToastMessage('Código QR no válido.', 'middle');
+      this.toastService.ToastMessage('Código QR no válido.', 'top');
       return;
     }
 
     if (this.currentEmail === 'admin@admin.com') {
       if (this.adminScanCount[result]) {
         if (this.adminScanCount[result] >= 2) {
-          this.toastService.ToastMessage('No se puede cargar el código más de dos veces.', 'middle');
+          this.toastService.ToastMessage('No es posible asignar nuevamente el QR.', 'top');
           return;
         } else {
           this.adminScanCount[result]++;
@@ -123,7 +137,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       }
     } else {
       if (this.scannedCodes.has(result)) {
-        this.toastService.ToastMessage('Código QR ya cargado.', 'middle');
+        this.toastService.ToastMessage('El Código QR ya ha sido utilizado.', 'top');
         return;
       }
     }
@@ -131,7 +145,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.credits += this.qrCodes[result];
     this.scannedCodes.add(result);
     await this.updateUserCredits();
-    this.toastService.ToastMessage(`${this.qrCodes[result]} Créditos se han cargado exitosamente!!`, 'middle');
+    this.toastService.ToastMessage(`${this.qrCodes[result]} Créditos se han cargado exitosamente!!`, 'top');
   }
 
   async clearCredits(): Promise<void> {
@@ -139,8 +153,33 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.scannedCodes.clear();
     this.adminScanCount = {};
     await this.updateUserCredits();
-    this.toastService.ToastMessage('Créditos limpiados.', 'middle');
+    this.toastService.ToastMessage('Créditos borrados!.', 'top');
   }
+
+  async confirmClearCredits(): Promise<void> {
+    const alert = await this.alertController.create({
+      header: 'Borrar créditos',
+      message: '¿Está seguro que desea borrar todos los créditos?',
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          handler: () => {
+            console.log('Borrado de créditos cancelado');
+          }
+        },
+        {
+          text: 'Borrar',
+          handler: () => {
+            this.clearCredits();
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+
 
   navigateTo(section: string) {
     this.navCtrl.navigateForward(`/${section}`);

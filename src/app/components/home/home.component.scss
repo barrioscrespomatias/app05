@@ -3,6 +3,29 @@ ion-content {
   --background: #00b4b6; /* Fondo claro */
 }
 
+.fullscreen-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  position: relative;
+}
+
+.reloj-container {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+}
+
+.hora-actual {
+  font-size: 2rem;
+  font-weight: bold;
+  text-align: center;
+}
+
 .credits-content {
   display: flex;
   justify-content: center;
@@ -30,11 +53,11 @@ ion-content {
 }
 
 .credits-label {
-  font-size: 24px;
+  font-size: 30px;
 }
 
 .credits-value {
-  font-size: 40px; /* Tamaño grande del número de créditos */
+  font-size: 60px; /* Tamaño grande del número de créditos */
   font-weight: bold;
 }
 
@@ -44,10 +67,11 @@ ion-content {
   margin-top: 20px;
 }
 
-.scan-button {
-  margin-bottom: 10px; /* Espacio entre los botones */
+ion-icon.big {
+  font-size: 84px;
 }
 
-.clear-button {
-  margin-top: 10px; /* Espacio entre los botones */
+ion-fab-button.big {
+  width: 80px !important;
+  height: 80px !important;
 }

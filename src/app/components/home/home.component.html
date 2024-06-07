@@ -1,37 +1,48 @@
-  <ion-header>
-    <ion-toolbar>
-      <ion-segment value="all">
-        <ion-segment-button (click)="navigateTo('')" value="favorites">
-          <ion-label>Cerrar sesión</ion-label>
-        </ion-segment-button>
-      </ion-segment>
-    </ion-toolbar>
-  </ion-header>
+<ion-header>
+  <ion-toolbar>
+    <ion-segment value="all">
+      <ion-segment-button (click)="navigateTo('')" value="favorites">
+        <ion-label>Cerrar sesión</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+</ion-header>
 
 <ion-content class="fullscreen-content">
-  
+  <div class="reloj-container" style="width: 100%;">
+    <ion-card>
+      <ion-card-content>
+        <p class="hora-actual">{{ hora }}</p>
+      </ion-card-content>
+    </ion-card>
+  </div>
 
-  <div class="credits-content">
+  <div class="credits-content" style="margin-top: 10px;">
     <div class="credits-container">
       <div class="credits-number">
         <img src="../../../assets//images/qr-code.png" alt="">
-        <ion-label class="credits-label" style="margin-top: 10px;">Créditos disponibles</ion-label>
-        <div id="open-loading" class="credits-value">{{ credits }}</div>
+        <ion-label class="credits-label ion-text-center" style="margin-top: 10px;">CRÉDITOS DISPONIBLES</ion-label>
+        <div id="open-loading" class="credits-value ion-text-center">{{ credits }}</div>
         <ion-loading trigger="open-loading" message="Dismissing after 3 seconds..." duration="3000"></ion-loading>
       </div>
     </div>
   </div>
 
-    <ion-fab vertical="bottom" horizontal="start" slot="fixed">
-      <ion-fab-button (click)="scan()" class="credits-button">
-        <ion-icon name="qr-code-outline"></ion-icon>
-      </ion-fab-button>
-    </ion-fab>
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="scan()" class="credits-button big">
+      <ion-icon name="qr-code-outline" size="large" class="big"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 
-    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-      <ion-fab-button (click)="clearCredits()" class="credits-button">
-        <ion-icon name="trash-outline"></ion-icon>
-      </ion-fab-button>
-    </ion-fab>
-  
+  <ion-fab vertical="bottom" horizontal="start" slot="fixed">
+    <ion-fab-button (click)="confirmClearCredits()"class="credits-button">
+      <ion-icon name="trash-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 </ion-content>
+
+<ion-footer [translucent]="true">
+  <ion-toolbar>
+    <ion-title class="ion-text-center">Carga de crédito</ion-title>
+  </ion-toolbar>
+</ion-footer>
